@@ -25,11 +25,16 @@
 MYDIR="$(dirname "$(readlink -f "$0")")"
 source "$MYDIR/dirs-config.sh"
 
+echo ">>> Backing up MySQL..."
+
 $MYDIR/backup_mysql.sh
 
 # Remove the old testing
 rm -rf $TESTING_DIR
 rm -rf $TESTING_EXT_DIR
+
+
+echo ">>> Updating repos..."
 
 # Update the core
 cd $MEDIAWIKI_CLONE
@@ -41,6 +46,9 @@ git branch wikifm-production $(git tag -l | sort -V|tail -n1)
 cd $MEDIAWIKI_EXT_CLONE
 git pull
 git submodule update --init
+
+
+echo ">>> Creating new testing site..."
 
 # Snapshot a testing image
 git clone --depth 1 --branch wikifm-production file://$MEDIAWIKI_CLONE $TESTING_DIR
@@ -55,6 +63,8 @@ rm -r $TESTING_DIR/extensions
 rm -r $TESTING_DIR/images
 ln -s $SHARED_IMAGES $TESTING_DIR/
 ln -s $TESTING_EXT_DIR $TESTING_DIR/extensions
+
+echo ">>> Pulling in external configuration..."
 
 # Add (our) Neverland
 cd $TESTING_DIR/skins/
@@ -86,6 +96,9 @@ rm -rf $TESTING_DIR/extensions/EmbedVideo/.git/
 # Fix permissione for FlaggedRevs
 chmod o+r $TESTING_DIR/extensions/FlaggedRevs/frontend/modules
 
+
+echo ">>> Fixing settings..."
+
 # Copy LocalSettings.php over
 cp $PRODUCTION_DIR/LocalSettings.php $TESTING_DIR/
 echo "// **** DELETE THE FOLLOWING LINES IN PRODUCTION: ***" >> $TESTING_DIR/LocalSettings.php
@@ -93,4 +106,7 @@ echo "\$wgReadOnly = 'Upgrading MediaWiki';" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgAllowSchemaUpdates" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgSecureLogin  = false; // DELETE ME IN PRODUCTION" >> $TESTING_DIR/LocalSettings.php
 sed -i s,"$PRODUCTION_DIR","$TESTING_DIR",g $TESTING_DIR/LocalSettings.php
+
+
+echo ">>> All done!!!"
 
