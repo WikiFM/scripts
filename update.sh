@@ -25,31 +25,22 @@
 MYDIR="$(dirname "$(readlink -f "$0")")"
 source "$MYDIR/dirs-config.sh"
 
-# Setup: once and for all run: echo "@hourly php /var/www/production/extensions/FlaggedRevs/maintenance/updateStats.php" | crontab -u www-data
-
-## How to update the installation
-
 # Remove the old testing
-
 rm -rf $TESTING_DIR
 rm -rf $TESTING_EXT_DIR
 
 # Update the core
-
 cd $MEDIAWIKI_CLONE
 git pull
 git branch -d wikifm-production
 git branch wikifm-production $(git tag -l | sort -V|tail -n1)
 
 # Update extensions
-
 cd $MEDIAWIKI_EXT_CLONE
 git pull
 git submodule update --init
 
 # Snapshot a testing image
-
-cd /var/www
 git clone --depth 1 --branch wikifm-production file://$MEDIAWIKI_CLONE $TESTING_DIR
 rm -rf $TESTING_DIR/.git*
 

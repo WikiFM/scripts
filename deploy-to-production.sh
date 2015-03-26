@@ -28,8 +28,10 @@ rm $PRODUCTION_DIR/extensions
 ln -s $PRODUCTION_EXT_DIR $PRODUCTION_DIR/extensions
 # Note: the images symlink needs not to be updated
 
-# The final step:
+# The final steps, change config:
 sed -i s,"$TESTING_DIR","$PRODUCTION_DIR",g $PRODUCTION_DIR/LocalSettings.php
+# And update database
+php $PRODUCTION_DIR/maintenance/update.php
 
 service $WEBSERVER start
 # Remove read-only mode now.
@@ -37,3 +39,9 @@ service $WEBSERVER start
 # Clean old-old production
 rm -rf $OLD_OLD_PRODUCTION_DIR
 rm -rf $OLD_OLD_PRODUCTION_EXT_DIR
+
+echo
+echo
+echo ">>> All done! Don't forget to make WikiFM RW again <<<"
+echo
+echo

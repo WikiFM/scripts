@@ -16,6 +16,8 @@ echo ">>> Cloning the MediaWiki repositories (github clone)..."
 git clone git@github.com:wikimedia/mediawiki.git $MEDIAWIKI_CLONE
 git clone git@github.com:wikimedia/mediawiki-extensions.git $MEDIAWIKI_EXT_CLONE
 
+echo "@hourly php $PRODUCTION_DIR/extensions/FlaggedRevs/maintenance/updateStats.php" | crontab -u www-data
+
 echo
 echo
 echo ">>> All done! Now run update.sh <<<"
