@@ -1,11 +1,7 @@
 How to use the scripts
 ----------------------
 
-First, backup MySQL
-
-    ./backup_mysql.sh
-    
-Then, proceed to the update:
+Then, proceed to the update (will backup mysql):
 
     ./update.sh
 

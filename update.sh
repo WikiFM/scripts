@@ -25,6 +25,8 @@
 MYDIR="$(dirname "$(readlink -f "$0")")"
 source "$MYDIR/dirs-config.sh"
 
+$MYDIR/backup_mysql.sh
+
 # Remove the old testing
 rm -rf $TESTING_DIR
 rm -rf $TESTING_EXT_DIR
