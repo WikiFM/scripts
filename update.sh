@@ -16,7 +16,7 @@ echo ">>> Updating repos..."
 # Update the core
 cd $MEDIAWIKI_CLONE
 git pull
-git branch -d wikifm-production
+git branch -D wikifm-production
 git branch wikifm-production $(git tag -l | sort -V|tail -n1)
 
 # Update extensions
