@@ -17,7 +17,7 @@ echo ">>> Updating repos..."
 cd $MEDIAWIKI_CLONE
 git pull
 git branch -D wikifm-production
-git branch wikifm-production $(git tag -l | sort -V|tail -n1)
+git branch wikifm-production $(git branch -r | sort -V|tail -n1)
 
 # Update extensions
 cd $MEDIAWIKI_EXT_CLONE
@@ -79,7 +79,7 @@ echo ">>> Fixing settings..."
 cp $PRODUCTION_DIR/LocalSettings.php $TESTING_DIR/
 echo "// **** DELETE THE FOLLOWING LINES IN PRODUCTION: ***" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgReadOnly = 'Upgrading MediaWiki';" >> $TESTING_DIR/LocalSettings.php
-echo "\$wgAllowSchemaUpdates" >> $TESTING_DIR/LocalSettings.php
+echo "\$wgAllowSchemaUpdates = false;" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgSecureLogin  = false; // DELETE ME IN PRODUCTION" >> $TESTING_DIR/LocalSettings.php
 sed -i s,"$PRODUCTION_DIR","$TESTING_DIR",g $TESTING_DIR/LocalSettings.php
 
