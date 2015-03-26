@@ -5,6 +5,8 @@ TESTING_EXT_DIR="/var/www/extensions-testing"
 PRODUCTION_DIR="/var/www/production"
 PRODUCTION_EXT_DIR="/var/www/extensions-production"
 
+MYSQL_BACKUP_DIR=""
+DATABASE_TESTING_NAME=""
 
 MEDIAWIKI_CLONE="/var/www/core"
 MEDIAWIKI_EXT_CLONE="/var/www/extensions"
