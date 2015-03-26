@@ -1,26 +1,4 @@
-#!/bin/sh
-
-## Updating the MediaWiki installation of WikiFM
-#
-# setup: (in /var/www)
-#
-#   production:
-#       where the production installation stays
-#   testing:
-#       temporary directory where the new code is put for testing
-#   extensions-production:
-#       snapshot of the extensions used for production codebase
-#   extensions-testing:
-#       snapshot of the extensions used for testing
-#   images:
-#       www-data writable, storage for wiki data (pdfs, ...)
-#
-# repos:
-#   extensions: submodule containing all the extensions
-#               https://gerrit.wikimedia.org/r/p/mediawiki/extensions.git
-#   core: contains the MediaWiki code
-#               https://gerrit.wikimedia.org/r/p/mediawiki/core.git
-#
+#!/bin/bash
 
 MYDIR="$(dirname "$(readlink -f "$0")")"
 source "$MYDIR/dirs-config.sh"
@@ -32,7 +10,6 @@ $MYDIR/backup_mysql.sh
 # Remove the old testing
 rm -rf $TESTING_DIR
 rm -rf $TESTING_EXT_DIR
-
 
 echo ">>> Updating repos..."
 
@@ -46,7 +23,6 @@ git branch wikifm-production $(git tag -l | sort -V|tail -n1)
 cd $MEDIAWIKI_EXT_CLONE
 git pull
 git submodule update --init
-
 
 echo ">>> Creating new testing site..."
 

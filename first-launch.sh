@@ -1,3 +1,4 @@
+#!/bin/bash
 # Just set-up the various dirs
 
 MYDIR="$(dirname "$(readlink -f "$0")")"
