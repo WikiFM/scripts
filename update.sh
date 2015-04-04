@@ -23,6 +23,7 @@ git branch wikifm-production $(git branch -r | sort -V|tail -n1)
 cd $MEDIAWIKI_EXT_CLONE
 git pull
 git submodule update --init
+git submodule foreach 'git checkout master; git pull || :'
 
 echo ">>> Creating new testing site..."
 
@@ -44,13 +45,7 @@ echo ">>> Pulling in external configuration..."
 
 # Add (our) Neverland
 cd $TESTING_DIR/skins/
-rm -rf *everland*
-rm -rf .git
 git clone git://github.com/WikiFM/Neverland.git
-mv Neverland/.git .
-git reset --hard
-rm -rf Neverland/
-rm -rf .git
 
 # ...and CategorySuggest
 cd $TESTING_DIR/extensions/
@@ -82,6 +77,10 @@ echo "\$wgReadOnly = 'Upgrading MediaWiki';" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgAllowSchemaUpdates = false;" >> $TESTING_DIR/LocalSettings.php
 echo "\$wgSecureLogin  = false; // DELETE ME IN PRODUCTION" >> $TESTING_DIR/LocalSettings.php
 sed -i s,"$PRODUCTION_DIR","$TESTING_DIR",g $TESTING_DIR/LocalSettings.php
+
+cd $TESTING_DIR
+wget https://getcomposer.org/composer.phar
+php composer.phar install
 
 
 echo ">>> All done!!!"
